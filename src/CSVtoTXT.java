@@ -15,7 +15,7 @@ public class CSVtoTXT {
         String[] listFiles = f.list();
         assert listFiles != null;
         for (String file : listFiles) {
-            if(!file.equals("out.csv")){
+            if (!file.equals("out.csv")) {
                 new File(rute + file).delete();
             }
         }
@@ -34,29 +34,47 @@ public class CSVtoTXT {
                         if (a[0].equals("KEY")) {
                             nameFile = a[i];
                         } else {
-                            values.add(a[0] + "=>" + a[i]);
+                            //System.out.println(a.length);
+                            //System.out.println(a[i-1]);
+                            try {
+                                values.add(a[0] + "=>" + a[i]);
+                            } catch (Exception e) {
+                                values.add(a[0] + "=> ");
+                            }
                         }
                     }
                 }
                 lists.put(nameFile, values);
+
             }
-
-
             for (Map.Entry<String, List<String>> entry : lists.entrySet()) {
 
                 File fout = new File(rute + entry.getKey());
                 try {
                     FileOutputStream fos = new FileOutputStream(fout);
                     BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(fos));
+                    boolean posible = false;
+                    //System.out.println(entry.getKey());
+                    if (entry.getKey().contains(".php")) {
+                        posible = true;
+                    }
                     for (String s : entry.getValue()) {
-                        bw.write(s);
-                        bw.newLine();
+                        if (posible && s.contains("php")) {
+                            bw.write(s);
+                            bw.newLine();
+                        } else if (!posible && !s.contains("php")) {
+                            bw.write(s);
+                            bw.newLine();
+                        }
+
+
                     }
                     bw.close();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
+
 
         } catch (IOException e) {
             e.printStackTrace();
