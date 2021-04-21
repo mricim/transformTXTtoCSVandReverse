@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static java.lang.System.exit;
+
 public class CSVtoTXT {
     public static void main(String[] args) throws IOException {
         String rute = "C:/Users/Eric/Desktop/traducciones/fromCSV/";
@@ -38,7 +40,7 @@ public class CSVtoTXT {
                             //System.out.println(a[i-1]);
                             try {
                                 values.add(a[0] + "=>" + a[i]);
-                            } catch (Exception e) {
+                            }catch (Exception e){
                                 values.add(a[0] + "=> ");
                             }
                         }
@@ -46,8 +48,7 @@ public class CSVtoTXT {
                 }
                 lists.put(nameFile, values);
 
-            }
-            for (Map.Entry<String, List<String>> entry : lists.entrySet()) {
+            }            for (Map.Entry<String, List<String>> entry : lists.entrySet()) {
 
                 File fout = new File(rute + entry.getKey());
                 try {
@@ -68,6 +69,7 @@ public class CSVtoTXT {
                         }
 
 
+
                     }
                     bw.close();
                 } catch (IOException e) {
@@ -78,6 +80,5 @@ public class CSVtoTXT {
 
         } catch (IOException e) {
             e.printStackTrace();
-        }
-    }
+        }    }
 }
