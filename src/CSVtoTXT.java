@@ -40,7 +40,7 @@ public class CSVtoTXT {
                             //System.out.println(a[i-1]);
                             try {
                                 values.add(a[0] + "=>" + a[i]);
-                            }catch (Exception e){
+                            } catch (Exception e) {
                                 values.add(a[0] + "=> ");
                             }
                         }
@@ -48,7 +48,8 @@ public class CSVtoTXT {
                 }
                 lists.put(nameFile, values);
 
-            }            for (Map.Entry<String, List<String>> entry : lists.entrySet()) {
+            }
+            for (Map.Entry<String, List<String>> entry : lists.entrySet()) {
 
                 File fout = new File(rute + entry.getKey());
                 try {
@@ -60,14 +61,16 @@ public class CSVtoTXT {
                         posible = true;
                     }
                     for (String s : entry.getValue()) {
-                        if (posible && s.contains("php")) {
-                            bw.write(s);
-                            bw.newLine();
-                        } else if (!posible && !s.contains("php")) {
+                        if (posible) {
+                            if (s.contains("php")) {
+                                s = "$messages['" + (s.replace("=>", "']='") + "';");
+                                bw.write(s);
+                                bw.newLine();
+                            }
+                        } else if (!s.contains("php")) {
                             bw.write(s);
                             bw.newLine();
                         }
-
 
 
                     }
@@ -80,5 +83,6 @@ public class CSVtoTXT {
 
         } catch (IOException e) {
             e.printStackTrace();
-        }    }
+        }
+    }
 }
