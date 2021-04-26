@@ -42,6 +42,28 @@ public class TXTtoCSV {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+            }else if(files.contains(".php")){
+                title += files + ";";
+                Map<String, String> values = new HashMap<>();
+                try {
+                    List<String> lines = Files.readAllLines(Paths.get(rute + files), Charset.defaultCharset());
+                    for (String line : lines) {
+                        if (!line.isEmpty() && !line.equals("//")&&!line.equals("<?php")&&!line.equals("?>")) {
+                            //System.out.println(line);
+                            line=line.replace("$messages['","").replace("';","");
+                            String[] a = line.split("']='");
+                            hashSetKeys.add(a[0]);
+                            try {
+                                values.put(a[0], a[1]);
+                            } catch (Exception e) {
+                                //e.printStackTrace();
+                            }
+                        }
+                    }
+                    listaColumnas.add(values);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
 

@@ -61,6 +61,7 @@ public class CSVtoTXT {
                         posible = true;
                     }
                     for (String s : entry.getValue()) {
+                        System.out.println(s);
                         if (posible) {
                             if (s.contains("php")) {
                                 s = "$messages['" + (s.replace("=>", "']='") + "';");
@@ -68,6 +69,7 @@ public class CSVtoTXT {
                                 bw.newLine();
                             }
                         } else if (!s.contains("php")) {
+
                             bw.write(s);
                             bw.newLine();
                         }
