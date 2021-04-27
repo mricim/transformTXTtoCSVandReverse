@@ -7,10 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static java.lang.System.exit;
-
 public class CSVtoTXT {
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         String rute = "C:/Users/Eric/Desktop/traducciones/fromCSV/";
 
         File f = new File(rute);
@@ -36,8 +34,6 @@ public class CSVtoTXT {
                         if (a[0].equals("KEY")) {
                             nameFile = a[i];
                         } else {
-                            //System.out.println(a.length);
-                            //System.out.println(a[i-1]);
                             try {
                                 values.add(a[0] + "=>" + a[i]);
                             } catch (Exception e) {
@@ -51,15 +47,12 @@ public class CSVtoTXT {
             }
             for (Map.Entry<String, List<String>> entry : lists.entrySet()) {
 
-                File fout = new File(rute + entry.getKey());
+                File fileOut = new File(rute + entry.getKey());
                 try {
-                    FileOutputStream fos = new FileOutputStream(fout);
-                    BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(fos));
-                    boolean posible = false;
+                    FileOutputStream fileOutputStream = new FileOutputStream(fileOut);
+                    BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(fileOutputStream));
+                    boolean posible = entry.getKey().contains(".php");
                     //System.out.println(entry.getKey());
-                    if (entry.getKey().contains(".php")) {
-                        posible = true;
-                    }
                     for (String s : entry.getValue()) {
                         System.out.println(s);
                         if (posible) {

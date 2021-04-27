@@ -1,12 +1,8 @@
 import java.io.*;
-import java.lang.reflect.Array;
-import java.net.URI;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
-
-import static java.lang.System.exit;
 
 public class TXTtoCSV {
     public static void main(String[] args) throws Exception {
@@ -16,8 +12,32 @@ public class TXTtoCSV {
 
         File f = new File(rute);
         String[] listFiles = f.list();
-
         assert listFiles != null;
+
+        Arrays.sort(listFiles);
+
+        Arrays.sort(listFiles, new Comparator<String>() {
+            @Override
+            public int compare(String s1, String s2) {
+                // the +1 is to avoid including the '.' in the extension and to avoid exceptions
+                // EDIT:
+                // We first need to make sure that either both files or neither file
+                // has an extension (otherwise we'll end up comparing the extension of one
+                // to the start of the other, or else throwing an exception)
+                final int s1Dot = s1.lastIndexOf('.');
+                final int s2Dot = s2.lastIndexOf('.');
+                if ((s1Dot == -1) == (s2Dot == -1)) { // both or neither
+                    s1 = s1.substring(s1Dot + 1);
+                    s2 = s2.substring(s2Dot + 1);
+                    return s2.compareTo(s1);
+                } else if (s1Dot == -1) { // only s2 has an extension, so s1 goes first
+                    return -1;
+                } else { // only s1 has an extension, so s1 goes second
+                    return 1;
+                }
+            }
+        });
+
         String title = "";
         title += "KEY;";
         for (String files : listFiles) {
@@ -71,11 +91,10 @@ public class TXTtoCSV {
             throw new Exception("No se encontraron ficheros de entrada");
         }
 
-        File fout = new File(rute + "out.csv");
-        fout.createNewFile();
+        File fileOut = new File(rute + "out.csv");
         try {
-            FileOutputStream fos = new FileOutputStream(fout);
-            BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(fos));
+            FileOutputStream fileOutputStream = new FileOutputStream(fileOut);
+            BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(fileOutputStream));
             bw.write(title);
             bw.newLine();
             for (String hashSetKey : hashSetKeys) {
